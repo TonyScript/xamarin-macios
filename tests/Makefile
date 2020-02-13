@@ -384,6 +384,10 @@ vsts-device-tests: xharness/xharness.exe
 	$(MAKE) -C $(TOP)/builds .stamp-mono-ios-sdk-destdir download -j
 	$(Q) ulimit -n 4096 && $(SYSTEM_MONO) --debug $(CURDIR)/$< $(XHARNESS_VERBOSITY) --jenkins --autoconf --rootdir $(CURDIR) --sdkroot $(XCODE_DEVELOPER_ROOT) --use-system:true --label=skip-all-tests,run-device-tests,run-bcl-tests --markdown-summary=$(CURDIR)/TestSummary.md $(TESTS_EXTRA_ARGUMENTS) $(TESTS_PERIODIC_COMMAND)
 
+labels-device-tests: xharness/xharness.exe
+	$(MAKE) -C $(TOP)/builds .stamp-mono-ios-sdk-destdir download -j
+	$(Q) ulimit -n 4096 && $(SYSTEM_MONO) --debug $(CURDIR)/$< $(XHARNESS_VERBOSITY) --jenkins --autoconf --rootdir $(CURDIR) --sdkroot $(XCODE_DEVELOPER_ROOT) --use-system:true --label=run-new-bcl-tests,skip-xamarin-tests --markdown-summary=$(CURDIR)/TestSummary.md $(TESTS_EXTRA_ARGUMENTS) $(TESTS_PERIODIC_COMMAND)
+
 ifdef ENABLE_XAMARIN
 wrench-launch-external wrench-report-external:
 	$(MAKE) -C $(MACCORE_PATH)/tests/external $@
