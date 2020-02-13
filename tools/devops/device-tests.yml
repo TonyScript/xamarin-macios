@@ -18,15 +18,15 @@ jobs:
   timeoutInMinutes: 1000
   strategy:
     matrix:
-      iOSNoBCL:
+      iOS-xamarin:
         CONTEXT: 'iOS-DDFun'
-        TESTS_EXTRA_ARGUMENTS: '--label=run-ios-64-tests,skip-bcl-tests' # run all tests but the bcl ones
-      iOSBCL:
-        CONTEXT: 'iOS-BCL-DDFun'
-        TESTS_EXTRA_ARGUMENTS: '--label=skip-all-tests,run-bcl-tests,run-device-tests' # run only the bcl tests
-      tvOS:
-        CONTEXT: 'tvOS-DDFun'
-        TESTS_EXTRA_ARGUMENTS: '--label=run-tvos-tests'
+        TESTS_EXTRA_ARGUMENTS: '--label=run-ios-64-tests,run-device-tests,skip-bcl-tests' # run all tests but the bcl ones
+      iOS-new-bcl:
+        CONTEXT: 'iOS-New-BCL-DDFun'
+        TESTS_EXTRA_ARGUMENTS: '--label=run-ios-64-tests,run-device-tests,run-new-bcl-tests,skip-xamarin-tests' # run only the new bcl tests
+      iOS-old-bcl:
+        CONTEXT: 'iOS-Old-BCL-DDFun'
+        TESTS_EXTRA_ARGUMENTS: '--label=run-ios-64-tests,run-device-tests,run-old-bcl-tests,skip-xamarin-tests' # run only the new bcl tests
     maxParallel: 4
 
   pool:
