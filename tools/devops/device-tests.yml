@@ -20,13 +20,13 @@ jobs:
     matrix:
       iOS-xamarin:
         CONTEXT: 'iOS-DDFun'
-        TESTS_EXTRA_ARGUMENTS: '--label=run-ios-64-tests,run-device-tests,skip-bcl-tests' # run all tests but the bcl ones
+        TESTS_EXTRA_ARGUMENTS: '--label=run-ios-64-tests,run-xamarin-tests,skip-bcl-tests' # run all tests but the bcl ones
       iOS-new-bcl:
         CONTEXT: 'iOS-New-BCL-DDFun'
-        TESTS_EXTRA_ARGUMENTS: '--label=run-ios-64-tests,run-device-tests,run-new-bcl-tests,skip-xamarin-tests' # run only the new bcl tests
+        TESTS_EXTRA_ARGUMENTS: '--label=run-ios-64-tests,run-new-bcl-tests' # run only the new bcl tests
       iOS-old-bcl:
         CONTEXT: 'iOS-Old-BCL-DDFun'
-        TESTS_EXTRA_ARGUMENTS: '--label=run-ios-64-tests,run-device-tests,run-old-bcl-tests,skip-xamarin-tests' # run only the new bcl tests
+        TESTS_EXTRA_ARGUMENTS: '--label=run-ios-64-tests,run-old-bcl-tests' # run only the new bcl tests
     maxParallel: 4
 
   pool:
