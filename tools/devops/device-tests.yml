@@ -16,6 +16,15 @@ jobs:
 - job: macOS
   displayName: Run Device Tests
   timeoutInMinutes: 1000
+  strategy:
+    matrix:
+      iOS:
+        CONTEXT: 'iOS-DDFun'
+        TESTS_EXTRA_ARGUMENTS: '--label=run-ios-64-tests'
+      tvOS:
+        CONTEXT: 'tvOS-DDFun'
+        TESTS_EXTRA_ARGUMENTS: '--label=run-tvos-tests'
+    maxParallel: 2
 
   pool:
     name: '$(poolName)'
@@ -94,7 +103,7 @@ jobs:
 ### Tell GitHub we're starting working on this commit
 ###
 
-  - bash: ./xamarin-macios/jenkins/vsts-device-tests-set-status.sh --start "--token=$(GitHub.Token)" "--device=iOS-DDFun"
+  - bash: ./xamarin-macios/jenkins/vsts-device-tests-set-status.sh --start "--token=$(GitHub.Token)" "--device=$CONTEXT"
     displayName: Set pending GitHub status
     continueOnError: true
     condition: succeededOrFailed()
@@ -111,7 +120,7 @@ jobs:
 ### Report final results to GitHub
 ###
 
-  - bash: ./xamarin-macios/jenkins/vsts-device-tests-set-status.sh "--token=$(GitHub.Token)" "--device=iOS-DDFun"
+  - bash: ./xamarin-macios/jenkins/vsts-device-tests-set-status.sh "--token=$(GitHub.Token)" "--device=$CONTEXT"
     displayName: Report results to GitHub as comment / status
     continueOnError: true
     condition: succeededOrFailed()
