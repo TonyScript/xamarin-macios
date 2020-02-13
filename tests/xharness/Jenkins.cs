@@ -40,6 +40,9 @@ namespace xharness
 		public bool IncludeXtro;
 		public bool IncludeCecil;
 		public bool IncludeDocs;
+		public bool IncludeNewBCL;
+		public bool IncludeOldBCL;
+		public bool IncludeXamarin = true;
 
 		public bool CleanSuccessfulTestRuns = true;
 		public bool UninstallTestApp = true;
@@ -220,12 +223,26 @@ namespace xharness
 			if (!project.IsExecutableProject)
 				return false;
 
-			if (!IncludeBcl && project.IsBclTest)
-				return false;
+			if (project.IsBclTest) {
+				if (!IncludeBcl && !(IncludeOldBCL || IncludeNewBCL)) {
+					Console.WriteLine ("We do not include the blc or the new or old labels");
+					return false;
+				}
+				if (IncludeNewBCL && !project.IsNewBclTest) {
+					Console.WriteLine ($"We include new but is old {project.Name}");
+					return false;
+				}
+				if (IncludeOldBCL && project.IsNewBclTest) {
+					Console.WriteLine ($"We include old but is new {project.Name}");
+					return false;
+				}
+			}
 
+			if (!IncludeXamarin && !project.IsBclTest)
+				return false;
 			if (Harness.IncludeSystemPermissionTests == false && project.Name == "introspection")
 				return false;
-
+			Console.WriteLine ($"Include {project.Name}");
 			return true;
 		}
 
@@ -799,6 +816,8 @@ namespace xharness
 			SetEnabled (labels, "mtouch", ref IncludeMtouch);
 			SetEnabled (labels, "mmp", ref IncludeMmpTest);
 			SetEnabled (labels, "bcl", ref IncludeBcl);
+			SetEnabled (labels, "new-bcl", ref IncludeNewBCL);
+			SetEnabled (labels, "old-bcl", ref IncludeOldBCL);
 			SetEnabled (labels, "btouch", ref IncludeBtouch);
 			SetEnabled (labels, "mac-binding-project", ref IncludeMacBindingProject);
 			SetEnabled (labels, "ios-extensions", ref IncludeiOSExtensions);
@@ -817,6 +836,8 @@ namespace xharness
 			SetEnabled (labels, "mac", ref IncludeMac);
 			SetEnabled (labels, "ios-msbuild", ref IncludeiOSMSBuild);
 			SetEnabled (labels, "ios-simulator", ref IncludeSimulator);
+			SetEnabled (labels, "xamarin", ref IncludeXamarin);
+
 			bool inc_permission_tests = false;
 			if (SetEnabled (labels, "system-permission", ref inc_permission_tests))
 				Harness.IncludeSystemPermissionTests = inc_permission_tests;

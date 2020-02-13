@@ -94,6 +94,13 @@ namespace xharness
 			}
 		}
 
+		public bool IsNewBclTest {
+			get {
+				// is new if we use xunit
+				return Name.Contains ("xUnit") || Name.Contains ("mscorlib");
+			}
+		}
+
 		public virtual TestProject Clone ()
 		{
 			TestProject rv = (TestProject) Activator.CreateInstance (GetType ());
